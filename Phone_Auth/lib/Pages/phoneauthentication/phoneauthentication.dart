@@ -24,10 +24,11 @@ class _PhoneAuthenticationState extends State<PhoneAuthentication> {
           myDialogBox(context);
         },
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 10,
+                vertical: 20,
               ),
               child: Image.network(
                 "https://static.vecteezy.com/system/resources/thumbnails/010/829/986/small/phone-icon-in-trendy-flat-style-free-png.png",

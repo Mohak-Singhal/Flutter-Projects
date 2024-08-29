@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:phone_auth/Pages/home.dart';
 import 'package:phone_auth/Pages/loginsignup.dart';
 import 'package:phone_auth/Pages/signup.dart';
+import 'package:phone_auth/email_verify.dart';
 // import 'package:phone_auth/Pages/signup.dart';
 
 void main() async {
@@ -26,10 +27,10 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), 
       builder: (context,snapshot){
         if (snapshot.hasData){
-          return const Home();
+          return  Home();
         }
         else{
-          return const Signup();
+          return const Loginsignup();
         }
 
       }

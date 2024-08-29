@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phone_auth/Pages/ForgotPassword/forgot_password.dart';
 import 'package:phone_auth/Pages/Widget/buttons.dart';
@@ -7,8 +8,8 @@ import 'package:phone_auth/Pages/home.dart';
 import 'package:phone_auth/Pages/login%20with%20google/googlelogin.dart';
 import 'package:phone_auth/Pages/phoneauthentication/phoneauthentication.dart';
 import 'package:phone_auth/Pages/signup.dart';
+import 'package:phone_auth/email_verify.dart';
 
-import 'Services/authentication.dart';
 
 class Loginsignup extends StatefulWidget {
   const Loginsignup({super.key});
@@ -20,7 +21,37 @@ class Loginsignup extends StatefulWidget {
 class _LoginsignupState extends State<Loginsignup> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   bool isLoading = false;
+
+
+Future<String> loginUser({
+  required String email,
+  required String password,
+}) async {
+  String res = 'Some Error Occurred';
+  try {
+    if (email.isNotEmpty && password.isNotEmpty) {
+      await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Check if the user's email is verified
+      User? user = auth.currentUser;
+      if (user != null && user.emailVerified) {
+        res = "success";
+      } else {
+        res = "Please verify your email address.";
+      }
+    } else {
+      res = "Please enter all the fields.";
+    }
+  } catch (e) {
+    res = e.toString();
+  }
+  return res;
+}
 
   void despose() {
     super.dispose();
@@ -29,7 +60,7 @@ class _LoginsignupState extends State<Loginsignup> {
   }
 
   void loginUsers() async {
-    String res = await AuthServicews().loginUser(
+    String res = await loginUser(
       email: emailController.text,
       password: passwordController.text,
     );
@@ -41,7 +72,7 @@ class _LoginsignupState extends State<Loginsignup> {
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const Home(),
+          builder: (context) =>  Home(),
         ),
       );
     } else {
@@ -77,6 +108,7 @@ class _LoginsignupState extends State<Loginsignup> {
                 hintText: "Password",
                 icon: Icons.lock),
             const ForgotPassword(),
+            const EmailVerify(),
             Buttons(
               onTap: loginUsers,
               text: "Log In",
@@ -108,14 +140,15 @@ class _LoginsignupState extends State<Loginsignup> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Home(),
+                      builder: (context) => Home(),
                     ),
                   );
                 },
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical:7),
+                      padding: const EdgeInsets.symmetric(vertical:20),
                       child: Image.network(
                         "https://ouch-cdn2.icons8.com/VGHyfDgzIiyEwg3RIll1nYupfj653vnEPRLr0AeoJ8g/rs:fit:456:456/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9wbmcvODg2/LzRjNzU2YThjLTQx/MjgtNGZlZS04MDNl/LTAwMTM0YzEwOTMy/Ny5wbmc.png",
                         height: 30,
@@ -135,7 +168,7 @@ class _LoginsignupState extends State<Loginsignup> {
               ),
             ),
             const PhoneAuthentication(),
-            SizedBox(
+            const SizedBox(
               // height: height / 15,
             ),
             Padding(
@@ -144,7 +177,7 @@ class _LoginsignupState extends State<Loginsignup> {
                 children: [
                   const Text(
                     "Don't have an Account?",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 20),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -157,7 +190,7 @@ class _LoginsignupState extends State<Loginsignup> {
                     },
                     child: const Text(
                       " SignUp",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,color: Colors.blue),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.blue),
                     ),
                   )
                 ],

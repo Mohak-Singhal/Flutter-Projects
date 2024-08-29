@@ -1,13 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_auth/Pages/Services/authentication.dart';
+
 import 'package:phone_auth/Pages/Widget/buttons.dart';
 import 'package:phone_auth/Pages/login%20with%20google/googlelogin.dart';
 import 'package:phone_auth/Pages/loginsignup.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Future<void> signOut() async {
+  await auth.signOut();
+}
+   Home({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class Home extends StatelessWidget {
                 onTap: () async {
                   await FirebaseServicesGoogle().googleSignOut();
 
-                  await AuthServicews().signOut();
+                  await signOut();
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const Loginsignup(),

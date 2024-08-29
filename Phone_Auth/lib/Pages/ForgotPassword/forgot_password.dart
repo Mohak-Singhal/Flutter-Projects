@@ -16,7 +16,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 35),
+      padding: const EdgeInsets.symmetric(horizontal: 35,vertical: 10),
       child: Align(
         alignment: Alignment.centerRight,
         child: InkWell(
